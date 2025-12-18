@@ -1,37 +1,72 @@
 import streamlit as st
 import google.generativeai as genai
 
-# --- PAGE CONFIG ---
-st.set_page_config(page_title="Omni-Prompt Architect", page_icon="🧬", layout="wide")
+# --- 1. PAGE CONFIG (MUST BE FIRST) ---
+st.set_page_config(
+    page_title="Omni-Prompt Architect", 
+    page_icon="🧬", 
+    layout="wide"
+)
 
-# --- STYLING (House of Namus Tech-Noir) ---
+# --- 2. CSS STYLING (Hiding Logos + Namus Branding) ---
 st.markdown("""
-<style>
+    <style>
+    /* HIDE STREAMLIT DEFAULT ELEMENTS */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+    .stDeployButton {display:none;}
+    
+    /* HOUSE OF NAMUS TECH-NOIR THEME */
     .stApp {background-color: #050505; color: #00ff41;}
+    
+    /* INPUT FIELDS */
     .stTextInput>div>div>input, .stTextArea>div>div>textarea, .stSelectbox>div>div>div {
-        background-color: #111; color: #e0e0e0; border: 1px solid #333;
+        background-color: #111; 
+        color: #e0e0e0; 
+        border: 1px solid #333;
     }
+    
+    /* BUTTON STYLING */
     .stButton>button {
-        background-color: #00ff41; color: black; font-weight: bold; border: none;
-        padding: 15px; text-transform: uppercase; letter-spacing: 2px;
-        width: 100%; transition: all 0.3s ease;
+        background-color: #00ff41; 
+        color: black; 
+        font-weight: bold; 
+        border: none;
+        padding: 15px; 
+        text-transform: uppercase; 
+        letter-spacing: 2px;
+        width: 100%; 
+        transition: all 0.3s ease;
     }
     .stButton>button:hover {
         box-shadow: 0 0 15px #00ff41;
+        color: black;
     }
+    
+    /* TYPOGRAPHY */
     h1 {font-family: 'Courier New', monospace; color: white; letter-spacing: -2px;}
-    .footer {position: fixed; bottom: 10px; width: 100%; text-align: center; color: #444; font-size: 10px;}
-</style>
+    
+    /* FOOTER */
+    .footer {
+        position: fixed; 
+        bottom: 10px; 
+        width: 100%; 
+        text-align: center; 
+        color: #444; 
+        font-size: 10px;
+    }
+    </style>
 """, unsafe_allow_html=True)
 
-# --- API KEY ---
+# --- 3. API SETUP ---
 api_key = st.secrets.get("GEMINI_API_KEY")
 
-# --- UI HEADER ---
+# --- 4. HEADER ---
 st.title("🧬 OMNI-PROMPT ARCHITECT")
 st.markdown("**House of Namus** | Universal Logic for Generative Video, Image & Avatar.")
 
-# --- CONTROLS ---
+# --- 5. CONTROLS ---
 col1, col2, col3 = st.columns(3)
 
 with col1:
@@ -59,7 +94,7 @@ with col3:
 
 user_input = st.text_area("Concept Input:", height=120, placeholder="e.g., A cyberpunk samurai walking in rain...")
 
-# --- LOGIC ENGINE ---
+# --- 6. LOGIC ENGINE ---
 if st.button("INITIATE SEQUENCE"):
     if not api_key:
         st.error("SYSTEM ERROR: API Key missing in Settings.")
@@ -67,9 +102,9 @@ if st.button("INITIATE SEQUENCE"):
         st.warning("INPUT REQUIRED.")
     else:
         genai.configure(api_key=api_key)
-        model = genai.GenerativeModel('gemini-1.5-flash')
+        # Using 'gemini-1.5-flash-latest' to ensure compatibility
+        model = genai.GenerativeModel('gemini-1.5-flash-latest')
         
-        # --- THE MASTER SYSTEM PROMPT ---
         system_instruction = f"""
         ROLE: Expert Prompt Engineer for Generative AI.
         TARGET MODEL: {target_model}
